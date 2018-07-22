@@ -1,0 +1,91 @@
+ArrayList<Fish> school;
+int fishCount;
+
+void setup() {
+  size(640, 480);  
+
+  school = new ArrayList<Fish>();
+  fishCount = 20;
+
+  for (int i = 0; i < fishCount; i++) {
+    school.add(new Fish(random(width), random(height), getRandomFishColor(), int(random(30, 100))));
+  }
+}
+
+void draw() {
+  background(0, 0, 127);
+
+  for (Fish f : school) {
+    f.updateFish();
+    f.drawFish();
+  }
+}
+
+color getRandomFishColor() {
+  return color(random(255), random(255), 0); // no blue so it won't blend in with the water
+}
+
+class Fish {
+  float x;
+  float y;
+  float xSpeed;
+  float ySpeed;
+  float maxSpeed;
+  color fishColor;
+  int fishSize;
+  boolean fishFacing; // true = right
+
+  Fish(float x, float y, color fishColor, int fishSize) {
+    this.x = x;
+    this.y = y;
+    this.fishColor = fishColor;
+    this.fishSize = fishSize;
+    this.maxSpeed = fishSize / 20; // bigger fish can swim faster
+  }
+
+  void updateFish() {
+    this.x += xSpeed;
+    this.y += ySpeed;
+    if (this.x > width ) this.x = -this.fishSize;
+    if (this.y > (height  - (fishSize*0.25)) || y < (fishSize*0.25)) this.ySpeed *= -1;
+
+    if (xSpeed >= 0) { 
+      fishFacing = true;
+    } else { 
+      fishFacing = false;
+    }
+
+    this.xSpeed += random(-0.5, 0.5);
+    if (this.xSpeed > maxSpeed) this.xSpeed = maxSpeed;
+    if (this.xSpeed < 0) this.xSpeed = 0;
+    this.ySpeed += random(-0.25, 0.25);
+    if (this.ySpeed > maxSpeed / 4) this.ySpeed = maxSpeed / 4; // fish go slower up and down than forward
+    if (this.ySpeed < -(maxSpeed / 4)) this.ySpeed = -(maxSpeed / 4);
+  }
+
+  void drawFish() {
+    float x = this.x;
+    float y = this.y;
+    float fishSize = this.fishSize;
+    color fishColor = this.fishColor;
+    boolean faceRight = this.fishFacing;
+
+    ellipseMode(CORNER);
+    noStroke();
+    fill(fishColor);
+
+    //draw the body
+    ellipse(x, y+(fishSize*0.033), fishSize, fishSize*0.25);
+
+    //draw the tail & eye
+    if (faceRight) {
+      triangle(x, y, x + (fishSize * 0.2), y + (fishSize * 0.16), x, y + (fishSize*0.33));
+      fill(0);
+      ellipse(x + (fishSize * 0.75), y + (fishSize * 0.13), (fishSize*0.05), (fishSize*0.05));
+    } else {
+      triangle((x + fishSize), y, (x + fishSize) - (fishSize * 0.2), y + (fishSize * 0.16), (x + fishSize), y + (fishSize*0.33));
+      fill(0);
+      ellipse(x + (fishSize * 0.25), y + (fishSize * 0.13), (fishSize*0.05), (fishSize*0.05));
+    }
+  }
+}
