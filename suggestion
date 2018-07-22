@@ -44,8 +44,8 @@ class Fish {
   }
 
   void updateFish() {
-    this.x += xSpeed;
-    this.y += ySpeed;
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
     if (this.x > width ) this.x = -this.fishSize;
     if (this.y > (height  - (fishSize*0.25)) || y < (fishSize*0.25)) this.ySpeed *= -1;
 
