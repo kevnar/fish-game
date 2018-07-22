@@ -1,0 +1,24 @@
+float fishX;
+float xspeed = 2;
+
+PImage background;
+int x=0; //global variable background location
+
+
+void setup(){
+  fishX = 250;
+ size(800,400);
+ background = loadImage("waterBackground.jpg");
+ background.resize(width,height);
+}
+
+
+void draw () {
+  ellipse(fishX,height/2, 15, 15);
+  fishX = fishX + xspeed;
+  if (fishX > width || fishX <0) {
+    xspeed = xspeed * -1;
+  }
+  
+ 
+}
